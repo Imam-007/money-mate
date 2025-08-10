@@ -3,6 +3,7 @@ package com.imam.moneymate.service.impl;
 import com.imam.moneymate.dto.ProfileDTO;
 import com.imam.moneymate.entity.Profile;
 import com.imam.moneymate.repository.ProfileRepository;
+import com.imam.moneymate.service.EmailService;
 import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,6 +15,7 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
+    private final EmailService emailService;
 
     @Override
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
@@ -21,7 +23,11 @@ public class ProfileServiceImpl implements ProfileService {
         newProfile.setActivationToken(UUID.randomUUID().toString());
         newProfile = profileRepository.save(newProfile);
 
-
+        //send Activation email
+        String activationLink = "http://localhost:8080/api/v1/activate?token=" + newProfile.getActivationToken();
+        String subject = "Activate you money mate account";
+        String body = "Click on the following link to activate your account " + activationLink;
+        emailService.sendEmail(newProfile.getEmail(), subject, body);
         return toDTO(newProfile);
     }
 
@@ -48,5 +54,16 @@ public class ProfileServiceImpl implements ProfileService {
                 .createdAt(profile.getCreatedAt())
                 .updatedAt(profile.getUpdatedAt())
                 .build();
+    }
+
+    public Boolean activateToken(String activationToken) {
+
+        return profileRepository.findByActivationToken(activationToken)
+                .map(profile -> {
+                    profile.setIsActive(true);
+                    profileRepository.save(profile);
+                    return true;
+                })
+                .orElse(false);
     }
 }
