@@ -49,6 +49,18 @@ public class CategoryServiceImpl implements CategoryService {
                 .toList();
     }
 
+    public CategoryDTO updateCategory(Long categoryId, CategoryDTO categoryDTO) {
+        Profile profile = profileService.getcurrentProfile();
+        Category existingcategory = categoryRepository.findByIdAndProfileId(categoryId, profile.getId())
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Category not found not accessible"));
+
+        existingcategory.setName(categoryDTO.getName());
+        existingcategory.setIcon(categoryDTO.getIcon());
+        categoryRepository.save(existingcategory);
+
+        return toDTO(existingcategory);
+    }
+
     private Category toEntity(CategoryDTO categoryDTO, Profile profile) {
 
         return Category.builder()

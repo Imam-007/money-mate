@@ -10,4 +10,6 @@ public interface CategoryService {
     public List<CategoryDTO> getCategoriesForCurrentUser();
 
     public List<CategoryDTO> getCategoriesByTypeForCurrentUser(String type);
+
+    public CategoryDTO updateCategory(Long categoryId, CategoryDTO categoryDTO);
 }
