@@ -40,6 +40,15 @@ public class CategoryServiceImpl implements CategoryService {
         return categories.stream().map(this::toDTO).toList();
     }
 
+    public List<CategoryDTO> getCategoriesByTypeForCurrentUser(String type) {
+        Profile profile = profileService.getcurrentProfile();
+
+        return categoryRepository.findByTypeAndProfileId(type, profile.getId())
+                .stream()
+                .map(this::toDTO)
+                .toList();
+    }
+
     private Category toEntity(CategoryDTO categoryDTO, Profile profile) {
 
         return Category.builder()

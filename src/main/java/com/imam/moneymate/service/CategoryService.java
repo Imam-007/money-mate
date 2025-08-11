@@ -8,4 +8,6 @@ public interface CategoryService {
     public CategoryDTO saveCategory(CategoryDTO categoryDTO);
 
     public List<CategoryDTO> getCategoriesForCurrentUser();
+
+    public List<CategoryDTO> getCategoriesByTypeForCurrentUser(String type);
 }
