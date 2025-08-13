@@ -6,10 +6,10 @@ import com.imam.moneymate.entity.Expense;
 import com.imam.moneymate.entity.Profile;
 import com.imam.moneymate.repository.CategoryRepository;
 import com.imam.moneymate.repository.ExpenseRepository;
-import com.imam.moneymate.service.CategoryService;
 import com.imam.moneymate.service.ExpenseService;
 import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -70,6 +70,13 @@ public class ExpenseServiceImpl implements ExpenseService {
         BigDecimal totalExpense = expenseRepository.findTotalExpenseByProfileId(profile.getId());
 
         return totalExpense != null ? totalExpense : BigDecimal.ZERO;
+    }
+
+    public List<ExpenseDTO> filterExpenses(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        Profile profile = profileService.getcurrentProfile();
+        List<Expense> list = expenseRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+
+        return list.stream().map(this::toDTO).toList();
     }
 
     private Expense toEntity(ExpenseDTO dto, Profile profile, Category category) {

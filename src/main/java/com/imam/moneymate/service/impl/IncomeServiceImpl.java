@@ -1,9 +1,7 @@
 package com.imam.moneymate.service.impl;
 
-import com.imam.moneymate.dto.ExpenseDTO;
 import com.imam.moneymate.dto.IncomeDTO;
 import com.imam.moneymate.entity.Category;
-import com.imam.moneymate.entity.Expense;
 import com.imam.moneymate.entity.Income;
 import com.imam.moneymate.entity.Profile;
 import com.imam.moneymate.repository.CategoryRepository;
@@ -11,6 +9,7 @@ import com.imam.moneymate.repository.IncomeRepository;
 import com.imam.moneymate.service.IncomeService;
 import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -71,6 +70,13 @@ public class IncomeServiceImpl implements IncomeService {
         BigDecimal totalIncomes = incomeRepository.findTotalExpenseByProfileId(profile.getId());
 
         return totalIncomes != null ? totalIncomes : BigDecimal.ZERO;
+    }
+
+    public List<IncomeDTO> filterIncomes(LocalDate startDate, LocalDate endDate, String keyword, Sort sort) {
+        Profile profile = profileService.getcurrentProfile();
+        List<Income> list = incomeRepository.findByProfileIdAndDateBetweenAndNameContainingIgnoreCase(profile.getId(), startDate, endDate, keyword, sort);
+
+        return list.stream().map(this::toDTO).toList();
     }
 
     private Income toEntity(IncomeDTO dto, Profile profile, Category category) {
