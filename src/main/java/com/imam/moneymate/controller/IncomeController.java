@@ -2,14 +2,14 @@ package com.imam.moneymate.controller;
 
 import com.imam.moneymate.dto.ExpenseDTO;
 import com.imam.moneymate.dto.IncomeDTO;
+import com.imam.moneymate.entity.Income;
 import com.imam.moneymate.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
@@ -24,5 +24,12 @@ public class IncomeController {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(saved);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<IncomeDTO>> getIncome() {
+        List<IncomeDTO> incomes = incomeService.getCurrentMonthIncome();
+
+        return ResponseEntity.ok(incomes);
     }
 }
