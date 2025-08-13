@@ -8,4 +8,6 @@ public interface IncomeService {
     public IncomeDTO addIncome(IncomeDTO dto);
 
     public List<IncomeDTO> getCurrentMonthIncome();
+
+    public void deleteIncome(Long incomeId);
 }

@@ -46,6 +46,18 @@ public class IncomeServiceImpl implements IncomeService {
         return list.stream().map(this::toDTO).toList();
     }
 
+    public void deleteIncome(Long incomeId) {
+        Profile profile = profileService.getcurrentProfile();
+        Income income = incomeRepository.findById(incomeId)
+                .orElseThrow( () -> new RuntimeException("Income not found"));
+
+        if (!income.getProfile().getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete expense");
+        }
+
+        incomeRepository.delete(income);
+    }
+
     private Income toEntity(IncomeDTO dto, Profile profile, Category category) {
 
         return Income.builder()
