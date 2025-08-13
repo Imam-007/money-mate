@@ -12,6 +12,9 @@ import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class ExpenseServiceImpl implements ExpenseService {
@@ -30,6 +33,16 @@ public class ExpenseServiceImpl implements ExpenseService {
         newExpense = expenseRepository.save(newExpense);
 
         return toDTO(newExpense);
+    }
+
+    public List<ExpenseDTO> getCurrentMonthExpense() {
+        Profile profile = profileService.getcurrentProfile();
+        LocalDate now = LocalDate.now();
+        LocalDate startDate = now.withDayOfMonth(1);
+        LocalDate endDate = now.withDayOfMonth(now.lengthOfMonth());
+        List<Expense> list = expenseRepository.findByProfileIdAndDateBetween(profile.getId(), startDate, endDate);
+
+        return list.stream().map(this::toDTO).toList();
     }
 
     private Expense toEntity(ExpenseDTO dto, Profile profile, Category category) {
