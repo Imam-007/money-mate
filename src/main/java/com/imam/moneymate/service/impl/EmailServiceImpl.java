@@ -1,10 +1,13 @@
 package com.imam.moneymate.service.impl;
 
 import com.imam.moneymate.service.EmailService;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -31,15 +34,17 @@ public class EmailServiceImpl implements EmailService {
     @Override
     public void sendEmail(String to, String subject, String body) {
         try {
-            SimpleMailMessage simpleMailMessage = new SimpleMailMessage();
+            MimeMessage mimeMessage = mailSender.createMimeMessage();
+            MimeMessageHelper helper = new MimeMessageHelper(mimeMessage, true, "UTF-8");
 
-            simpleMailMessage.setTo(to);
-            simpleMailMessage.setSubject(subject);
-            simpleMailMessage.setText(body);
-            simpleMailMessage.setFrom("maimam8409@gmail.com");
-            mailSender.send(simpleMailMessage);
-            System.out.println("email send");
-        } catch (Exception e) {
+            helper.setTo(to);
+            helper.setSubject(subject);
+            helper.setText(body, true); // HTML content enabled
+            helper.setFrom("maimam8409@gmail.com");
+
+            mailSender.send(mimeMessage);
+            System.out.println("Email sent successfully!");
+        } catch (MessagingException e) {
             throw new RuntimeException("Email sending failed: " + e.getMessage(), e);
         }
     }

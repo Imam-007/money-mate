@@ -79,6 +79,12 @@ public class ExpenseServiceImpl implements ExpenseService {
         return list.stream().map(this::toDTO).toList();
     }
 
+    public List<ExpenseDTO> getExpensesForUserOnDate(Long profileId, LocalDate date) {
+        List<Expense> list = expenseRepository.findByProfileIdAndDate(profileId, date);
+
+        return list.stream().map(this::toDTO).toList();
+    }
+
     private Expense toEntity(ExpenseDTO dto, Profile profile, Category category) {
 
         return Expense.builder()
