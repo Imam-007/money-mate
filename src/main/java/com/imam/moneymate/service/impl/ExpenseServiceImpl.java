@@ -12,6 +12,7 @@ import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -55,6 +56,20 @@ public class ExpenseServiceImpl implements ExpenseService {
         }
 
         expenseRepository.delete(expense);
+    }
+
+    public List<ExpenseDTO> getLatest5Expenses() {
+        Profile profile = profileService.getcurrentProfile();
+        List<Expense> expenses = expenseRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
+
+        return expenses.stream().map(this::toDTO).toList();
+    }
+
+    public BigDecimal getTotalExpense() {
+        Profile profile = profileService.getcurrentProfile();
+        BigDecimal totalExpense = expenseRepository.findTotalExpenseByProfileId(profile.getId());
+
+        return totalExpense != null ? totalExpense : BigDecimal.ZERO;
     }
 
     private Expense toEntity(ExpenseDTO dto, Profile profile, Category category) {
