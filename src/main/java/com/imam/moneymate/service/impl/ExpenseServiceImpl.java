@@ -45,6 +45,18 @@ public class ExpenseServiceImpl implements ExpenseService {
         return list.stream().map(this::toDTO).toList();
     }
 
+    public void deleteExpense(Long expenseId) {
+        Profile profile = profileService.getcurrentProfile();
+        Expense expense = expenseRepository.findById(expenseId)
+                .orElseThrow( () -> new RuntimeException("Expense not found"));
+
+        if (!expense.getProfile().getId().equals(profile.getId())) {
+            throw new RuntimeException("Unauthorized to delete expense");
+        }
+
+        expenseRepository.delete(expense);
+    }
+
     private Expense toEntity(ExpenseDTO dto, Profile profile, Category category) {
 
         return Expense.builder()

@@ -8,4 +8,6 @@ public interface ExpenseService {
     public ExpenseDTO addExpense(ExpenseDTO dto);
 
     public List<ExpenseDTO> getCurrentMonthExpense();
+
+    public void deleteExpense(Long expenseId);
 }
