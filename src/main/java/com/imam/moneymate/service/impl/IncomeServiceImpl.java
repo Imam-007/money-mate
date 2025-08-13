@@ -13,6 +13,7 @@ import com.imam.moneymate.service.ProfileService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -56,6 +57,20 @@ public class IncomeServiceImpl implements IncomeService {
         }
 
         incomeRepository.delete(income);
+    }
+
+    public List<IncomeDTO> getLatest5Incomes() {
+        Profile profile = profileService.getcurrentProfile();
+        List<Income> incomes = incomeRepository.findTop5ByProfileIdOrderByDateDesc(profile.getId());
+
+        return incomes.stream().map(this::toDTO).toList();
+    }
+
+    public BigDecimal getTotalIncomes() {
+        Profile profile = profileService.getcurrentProfile();
+        BigDecimal totalIncomes = incomeRepository.findTotalExpenseByProfileId(profile.getId());
+
+        return totalIncomes != null ? totalIncomes : BigDecimal.ZERO;
     }
 
     private Income toEntity(IncomeDTO dto, Profile profile, Category category) {
