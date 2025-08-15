@@ -8,6 +8,7 @@ import com.imam.moneymate.service.EmailService;
 import com.imam.moneymate.service.ProfileService;
 import com.imam.moneymate.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -24,10 +25,17 @@ import java.util.UUID;
 public class ProfileServiceImpl implements ProfileService {
 
     private final ProfileRepository profileRepository;
+
     private final EmailService emailService;
+
     private final PasswordEncoder passwordEncoder;
+
     private final AuthenticationManager authenticationManager;
+
     private final JwtUtil jwtUtil;
+
+    @Value("${app.activation.url}")
+    private String activationUrl;
 
     @Override
     public ProfileDTO registerProfile(ProfileDTO profileDTO) {
@@ -36,7 +44,7 @@ public class ProfileServiceImpl implements ProfileService {
         newProfile = profileRepository.save(newProfile);
 
         //send Activation email
-        String activationLink = "http://localhost:8080/api/v1/activate?token=" + newProfile.getActivationToken();
+        String activationLink = activationUrl + "/api/v1/activate?token=" + newProfile.getActivationToken();
         String subject = "Activate you money mate account";
         String body = "Click on the following link to activate your account " + activationLink;
         emailService.sendEmail(newProfile.getEmail(), subject, body);
