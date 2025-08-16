@@ -1,14 +1,63 @@
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import Input from "../components/Input";
+import { validateEmail } from "../util/Validation";
+import axiosConfig from "../util/AxiosConfig";
+import { API_ENDPOINTS } from "../util/apiEnpoints";
+import toast from "react-hot-toast";
+import { LoaderCircle } from "lucide-react";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+
+    if (!fullName.trim()) {
+      setError("Please enter your full name");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Please enter a valid email address");
+      setIsLoading(false);
+      return;
+    }
+
+    if (!password.trim()) {
+      setError("Please enter your password");
+      setIsLoading(false);
+      return;
+    }
+
+    setError("");
+
+    try {
+      const response = await axiosConfig.post(API_ENDPOINTS.REGISTER, {
+        fullName,
+        email,
+        password,
+      });
+
+      if (response.status === 201) {
+        toast.success("Profile created Successfully");
+        navigate("/login");
+      }
+    } catch (err) {
+      console.log(err);
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="h-screen w-full relative flex items-center justify-center overflow-hidden">
@@ -20,7 +69,7 @@ const Signup = () => {
           <p className="text-sm text-slate-700 text-center mb-8">
             Start tracking your application
           </p>
-          <form className="space-y-4">
+          <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex justify-center mb-6">
               {/**profile image */}
             </div>
@@ -55,10 +104,18 @@ const Signup = () => {
               </p>
             )}
             <button
+              disabled={isLoading}
               className="w-full py-3 text-lg font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               type="submit"
             >
-              SIGN UP
+              {isLoading ? (
+                <>
+                  <LoaderCircle className="animate-spin w-5 h-5" />
+                  Signing Up
+                </>
+              ) : (
+                "SIGN UP"
+              )}
             </button>
             <p className="text-sm text-slate-800 text-center mt-6">
               Already have an account?
