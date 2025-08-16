@@ -40,6 +40,8 @@ const Signup = () => {
 
     setError("");
 
+    //Sign up api call
+
     try {
       const response = await axiosConfig.post(API_ENDPOINTS.REGISTER, {
         fullName,
