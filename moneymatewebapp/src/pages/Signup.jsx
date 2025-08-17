@@ -6,6 +6,8 @@ import axiosConfig from "../util/AxiosConfig";
 import { API_ENDPOINTS } from "../util/apiEnpoints";
 import toast from "react-hot-toast";
 import { LoaderCircle } from "lucide-react";
+import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
+import uploadProfileImage from "../util/UploadProfileImage";
 
 const Signup = () => {
   const [fullName, setFullName] = useState("");
@@ -13,11 +15,13 @@ const Signup = () => {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [profilePhoto, setProfilePhoto] = useState(null);
 
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    let profileImageUrl = "";
     setIsLoading(true);
 
     if (!fullName.trim()) {
@@ -41,12 +45,16 @@ const Signup = () => {
     setError("");
 
     //Sign up api call
-
     try {
+      if (profilePhoto) {
+        const imageUrl = await uploadProfileImage(profilePhoto);
+        profileImageUrl = imageUrl || "";
+      }
       const response = await axiosConfig.post(API_ENDPOINTS.REGISTER, {
         fullName,
         email,
         password,
+        profileImageURL: profileImageUrl,
       });
 
       if (response.status === 201) {
@@ -73,7 +81,10 @@ const Signup = () => {
           </p>
           <form onSubmit={handleSubmit} className="space-y-4">
             <div className="flex justify-center mb-6">
-              {/**profile image */}
+              <ProfilePhotoSelector
+                image={profilePhoto}
+                setImage={setProfilePhoto}
+              />
             </div>
             <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
               <Input
