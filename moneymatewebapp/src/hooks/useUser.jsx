@@ -5,7 +5,7 @@ import { API_ENDPOINTS } from "../util/apiEnpoints";
 import axiosConfig from "../util/AxiosConfig";
 
 export const useUser = () => {
-  const { user, setUser, cleanUser } = useContext(AppContext);
+  const { user, setUser, clearUser } = useContext(AppContext);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -25,7 +25,7 @@ export const useUser = () => {
       } catch (error) {
         console.log("Failed to fetch user info", error);
         if (isMounted) {
-          cleanUser();
+          clearUser();
           navigate("/login");
         }
       }
@@ -34,5 +34,5 @@ export const useUser = () => {
     return () => {
       isMounted = false;
     };
-  }, [setUser, cleanUser, navigate]);
+  }, [setUser, clearUser, navigate]);
 };
