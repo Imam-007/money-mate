@@ -1,5 +1,7 @@
+import Dashboard from "../components/Dashboard";
+
 const Expense = () => {
-  return <div>Expense</div>;
+  return <Dashboard activeMenu="Expense">This is expense page</Dashboard>;
 };
 
 export default Expense;
