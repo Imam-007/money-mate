@@ -6,6 +6,8 @@ import { useEffect, useState } from "react";
 import axiosConfig from "../util/AxiosConfig";
 import { API_ENDPOINTS } from "../util/apiEnpoints";
 import toast from "react-hot-toast";
+import Modal from "../components/Modal";
+import AddCatrgoryForm from "../components/AddCategoryForm";
 
 const Category = () => {
   useUser();
@@ -45,12 +47,22 @@ const Category = () => {
       <div className="my-5 mx-auto">
         <div className="flex justify-between items-center mb-5">
           <h2 className="text-2xl font-semibold">All Categories</h2>
-          <button className=" cursor-pointer flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md shadow">
+          <button
+            onClick={() => setOpenAddCategoryModel(true)}
+            className=" cursor-pointer flex items-center gap-1 bg-blue-500 hover:bg-blue-600 text-white px-3 py-2 rounded-md shadow"
+          >
             <Plus size={15} />
             Add Category
           </button>
         </div>
         <CategoryList categories={categoryData} />
+        <Modal
+          isOpen={openAddCategorymodel}
+          onClose={() => setOpenAddCategoryModel(false)}
+          title="Add Category"
+        >
+          <AddCatrgoryForm />
+        </Modal>
       </div>
     </Dashboard>
   );
