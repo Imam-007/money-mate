@@ -77,6 +77,43 @@ const Category = () => {
     }
   };
 
+  const handleEditCategory = (catetogyToEdit) => {
+    setSelectCategory(catetogyToEdit);
+    setOpenEditCategoryModel(true);
+  };
+
+  const handleUpdateCategory = async (updatedCategory) => {
+    const { id, name, type, icon } = updatedCategory;
+
+    if (!name.trim()) {
+      toast.error("Category Name is required");
+      return;
+    }
+
+    if (!id) {
+      toast.error("CategoryId is missing for update");
+      return;
+    }
+
+    try {
+      await axiosConfig.put(API_ENDPOINTS.UPDATE_CATEGORY(id), {
+        name,
+        type,
+        icon,
+      });
+      setOpenEditCategoryModel(false);
+      setSelectCategory(null);
+      toast.success("Category Updated successfully");
+      fetchCategoryDetails();
+    } catch (error) {
+      console.log(
+        "Getting error while updating category",
+        error.response?.data?.message || error.message
+      );
+      toast.error(error.response?.data?.message || "Failed to update category");
+    }
+  };
+
   return (
     <Dashboard activeMenu="Category">
       <div className="my-5 mx-auto">
@@ -90,13 +127,30 @@ const Category = () => {
             Add Category
           </button>
         </div>
-        <CategoryList categories={categoryData} />
+        <CategoryList
+          categories={categoryData}
+          onEditCategory={handleEditCategory}
+        />
         <Modal
           isOpen={openAddCategorymodel}
           onClose={() => setOpenAddCategoryModel(false)}
           title="Add Category"
         >
           <AddCatrgoryForm onAddCategory={handleAddCategory} />
+        </Modal>
+        <Modal
+          onClose={() => {
+            setOpenEditCategoryModel(false);
+            setSelectCategory(null);
+          }}
+          isOpen={openEditCategoryModel}
+          title="Update Category"
+        >
+          <AddCatrgoryForm
+            initialCategoryData={selectCategory}
+            onAddCategory={handleUpdateCategory}
+            isEditing={true}
+          />
         </Modal>
       </div>
     </Dashboard>
