@@ -5,6 +5,9 @@ import axiosConfig from "../util/AxiosConfig";
 import { API_ENDPOINTS } from "../util/apiEnpoints";
 import toast from "react-hot-toast";
 import IncomeList from "../components/IncomeList";
+import Modal from "../components/Modal";
+import { Plus } from "lucide-react";
+import AddIncomeForm from "../components/AddIncomeForm";
 
 const Income = () => {
   useUser();
@@ -40,18 +43,101 @@ const Income = () => {
     }
   };
 
+  const fetchIncomeCategory = async () => {
+    try {
+      const response = await axiosConfig.get(
+        API_ENDPOINTS.CATEGORY_BY_TYPE("income")
+      );
+      if (response.status === 200) {
+        setCategories(response.data);
+      }
+    } catch (error) {
+      console.log("Failed to fetch income category", error);
+      toast.error(error.data?.message || "Failed to fetch income");
+    }
+  };
+
+  const handleAddIncom = async (income) => {
+    const { name, amount, date, icon, categoryId } = income;
+
+    if (!name.trim()) {
+      toast.error("Please enter a name");
+      return;
+    }
+
+    if (!amount || isNaN(amount) || Number(amount) <= 0) {
+      toast.error("Amount should be a valid number greater than 0");
+      return;
+    }
+
+    if (!date) {
+      toast.error("Please select a date");
+      return;
+    }
+    const today = new Date().toISOString().split("T")[0];
+    if (date > today) {
+      toast.error("Date can not be in the future");
+      return;
+    }
+
+    if (!categoryId) {
+      toast.error("Please select a category");
+      return;
+    }
+
+    try {
+      const response = await axiosConfig.post(API_ENDPOINTS.ADD_INCOME, {
+        name,
+        amount: Number(amount),
+        date,
+        icon,
+        categoryId,
+      });
+
+      if (response.status === 201) {
+        setOpenAddIncomeModal(false);
+        toast.success("Income added successfully");
+        fetchIncomeDetails();
+        fetchIncomeCategory();
+      }
+    } catch (error) {
+      console.log("Getting error while adding income", error);
+      toast.error(error.response?.data?.message || "Failed to adding income");
+    }
+  };
+
   useEffect(() => {
     fetchIncomeDetails();
+    fetchIncomeCategory();
   }, []);
   return (
     <Dashboard activeMenu="Income">
       <div className="my-5 mx-auto">
         <div className="grid grid-cols-1 gap-6">
-          <div>{/*overview for incomewith line car */}</div>
+          <div>
+            {/*overview for incomewith line car */}
+            <button
+              className="flex items-center gap-2 px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
+              onClick={() => setOpenAddIncomeModal(true)}
+            >
+              <Plus size={15} /> Add Income
+            </button>
+          </div>
           <IncomeList
             transactions={incomeData}
             onDelete={(id) => console.log("deleting the income", id)}
           />
+
+          <Modal
+            isOpen={openAddIncomeModal}
+            onClose={() => setOpenAddIncomeModal(false)}
+            title="Add Income"
+          >
+            <AddIncomeForm
+              onAddIncome={(income) => handleAddIncom(income)}
+              categories={categories}
+            />
+          </Modal>
         </div>
       </div>
     </Dashboard>
