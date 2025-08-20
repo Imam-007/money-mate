@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import EmojiPickerPopup from "./EmojiPickerPopup";
 import Input from "./Input";
 
@@ -19,6 +19,12 @@ const AddIncomeForm = ({ onAddIncome, categories }) => {
   const handleChange = (key, value) => {
     setIncome({ ...income, [key]: value });
   };
+
+  useEffect(() => {
+    if (categories.length > 0 && !income.categoryId) {
+      setIncome((prev) => ({ ...prev, categoryId: categories[0].id }));
+    }
+  }, [categories, income.categoryId]);
 
   return (
     <div>
