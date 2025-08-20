@@ -1,8 +1,6 @@
 package com.imam.moneymate.controller;
 
-import com.imam.moneymate.dto.ExpenseDTO;
 import com.imam.moneymate.dto.IncomeDTO;
-import com.imam.moneymate.entity.Income;
 import com.imam.moneymate.service.IncomeService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
