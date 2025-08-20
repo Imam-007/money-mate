@@ -17,6 +17,7 @@ import java.util.stream.IntStream;
 @Service
 public class ExcelServiceImpl implements ExcelService {
 
+    @Override
     public void writeIncomeToExcel(OutputStream outputStream, List<IncomeDTO> incomeDTOS) throws IOException {
         try(Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Income");
@@ -41,6 +42,7 @@ public class ExcelServiceImpl implements ExcelService {
         }
     }
 
+    @Override
     public void writeExpenseToExcel(OutputStream outputStream, List<ExpenseDTO> expenseDTOS) throws IOException {
         try(Workbook workbook = new XSSFWorkbook()) {
             Sheet sheet = workbook.createSheet("Expense");
