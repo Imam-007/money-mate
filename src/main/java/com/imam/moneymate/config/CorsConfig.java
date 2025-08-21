@@ -13,8 +13,8 @@ public class CorsConfig {
         return new WebMvcConfigurer() {
             @Override
             public void addCorsMappings(CorsRegistry registry) {
-                registry.addMapping("/**") // allow all endpoints
-                        .allowedOrigins("http://localhost:5173") // frontend origin
+                registry.addMapping("/**")
+                        .allowedOrigins("https://keen-kataifi-1fe5f9.netlify.app")
                         .allowedMethods("GET", "POST", "PUT", "DELETE", "OPTIONS")
                         .allowedHeaders("*")
                         .allowCredentials(true);
@@ -22,4 +22,3 @@ public class CorsConfig {
         };
     }
 }
-
