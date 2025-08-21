@@ -63,7 +63,22 @@ const Signup = () => {
       }
     } catch (err) {
       console.log(err);
-      setError(err.message);
+
+      if (err.response) {
+        if (err.response.status === 403) {
+          toast.error("Email already registered");
+          setError("Email already registered");
+        } else if (err.response.data && err.response.data.message) {
+          toast.error(err.response.data.message);
+          setError(err.response.data.message);
+        } else {
+          toast.error("Something went wrong. Please try again.");
+          setError("Something went wrong. Please try again.");
+        }
+      } else {
+        toast.error(err.message || "Something went wrong");
+        setError(err.message || "Something went wrong");
+      }
     } finally {
       setIsLoading(false);
     }
@@ -72,7 +87,7 @@ const Signup = () => {
   return (
     <div className="h-screen w-full relative flex items-center justify-center overflow-hidden">
       <div className="relative z-10 w-full max-w-lg px-6">
-        <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-l-lg shadow-2xl p-8 max-h-[90vh] overflow-y-auto">
+        <div className="bg-white bg-opacity-95 backdrop-blur-sm rounded-l-lg shadow-2xl p-8">
           <h3 className="text-2xl font-semibold text-black text-center mb-2">
             Create An account
           </h3>
@@ -121,14 +136,7 @@ const Signup = () => {
               className="w-full py-3 text-lg font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               type="submit"
             >
-              {isLoading ? (
-                <>
-                  <LoaderCircle className="animate-spin w-5 h-5" />
-                  Signing Up
-                </>
-              ) : (
-                "SIGN UP"
-              )}
+              {isLoading ? <>Signing Up</> : "SIGN UP"}
             </button>
             <p className="text-sm text-slate-800 text-center mt-6">
               Already have an account?
