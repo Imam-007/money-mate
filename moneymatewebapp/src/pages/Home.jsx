@@ -9,6 +9,7 @@ import axiosConfig from "../util/AxiosConfig";
 import { API_ENDPOINTS } from "../util/apiEnpoints";
 import toast from "react-hot-toast";
 import RecenetTransaction from "../components/RecentTransaction";
+import Transactions from "../components/Transactions";
 
 const Home = () => {
   useUser();
@@ -72,14 +73,24 @@ const Home = () => {
             {/*Recent Transaction */}
             <RecenetTransaction
               transactions={dashboardData?.recentTransaction}
+            />
+          </div>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-6">
+            {/*Expense transaction */}
+            <Transactions
+              transactions={dashboardData?.recent5Expense || []}
               onMore={() => navigate("/expense")}
+              type="expense"
+              title="Recent Expenses"
             />
 
-            {/*Finance overview card */}
-
-            {/*Expense transaction */}
-
             {/*Income transaction */}
+            <Transactions
+              transactions={dashboardData?.recent5Income || []}
+              onMore={() => navigate("/income")}
+              type="income"
+              title="Recent Incomes "
+            />
           </div>
         </div>
       </Dashboard>
