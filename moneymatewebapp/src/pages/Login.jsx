@@ -96,14 +96,7 @@ const Login = () => {
               className="w-full py-3 text-lg font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition"
               type="submit"
             >
-              {isLoading ? (
-                <>
-                  <LoaderCircle className="animate-spin w-5 h-5" />
-                  Logging in...
-                </>
-              ) : (
-                "LOGIN"
-              )}
+              {isLoading ? <>Logging in...</> : "LOGIN"}
             </button>
             <p className="text-sm text-slate-800 text-center mt-6">
               Don’t have an account?{" "}
