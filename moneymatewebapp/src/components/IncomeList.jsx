@@ -4,23 +4,24 @@ import moment from "moment";
 import { useState } from "react";
 
 const IncomeList = ({ transactions, onDelete, onDownload, onEmail }) => {
-  const [loading, setLoading] = useState(false);
+  const [emailLoading, setEmailLoading] = useState(false);
+  const [downloadLoading, setDownloadLoading] = useState(false);
 
   const handleEmail = async () => {
-    setLoading(true);
+    setEmailLoading(true);
     try {
       await onEmail();
     } finally {
-      setLoading(false);
+      setEmailLoading(false);
     }
   };
 
   const handleDownload = async () => {
-    setLoading(true);
+    setDownloadLoading(true);
     try {
       await onDownload();
     } finally {
-      setLoading(false);
+      setDownloadLoading(false);
     }
   };
 
@@ -30,11 +31,11 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }) => {
         <h5 className="text-lg font-semibold">Income Source</h5>
         <div className="flex items-center gap-2">
           <button
-            disabled={loading}
+            disabled={emailLoading}
             onClick={handleEmail}
             className="px-3 py-1 rounded-xl bg-blue-500 text-white flex items-center gap-1 hover:bg-blue-600 cursor-pointer"
           >
-            {loading ? (
+            {emailLoading ? (
               <>Emailing...</>
             ) : (
               <>
@@ -43,11 +44,11 @@ const IncomeList = ({ transactions, onDelete, onDownload, onEmail }) => {
             )}
           </button>
           <button
-            disabled={loading}
+            disabled={downloadLoading}
             onClick={handleDownload}
             className="px-3 py-1 rounded-xl bg-green-500 text-white flex items-center gap-1 hover:bg-green-600 cursor-pointer"
           >
-            {loading ? (
+            {downloadLoading ? (
               <>Downloading...</>
             ) : (
               <>
