@@ -30,7 +30,6 @@ const DeleteAlert = ({ content, onDelete }) => {
           ) : (
             <>Delete</>
           )}
-          Delete
         </button>
       </div>
     </div>

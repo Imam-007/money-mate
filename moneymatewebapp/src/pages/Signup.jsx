@@ -5,7 +5,6 @@ import { validateEmail } from "../util/Validation";
 import axiosConfig from "../util/AxiosConfig";
 import { API_ENDPOINTS } from "../util/apiEnpoints";
 import toast from "react-hot-toast";
-import { LoaderCircle } from "lucide-react";
 import ProfilePhotoSelector from "../components/ProfilePhotoSelector";
 import uploadProfileImage from "../util/UploadProfileImage";
 
@@ -101,7 +100,7 @@ const Signup = () => {
                 setImage={setProfilePhoto}
               />
             </div>
-            <div className="grid grid-cols-2 md:grid-cols-2 gap-4">
+            <div className="grid-cols-2 md:grid-cols-2 gap-4">
               <Input
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
