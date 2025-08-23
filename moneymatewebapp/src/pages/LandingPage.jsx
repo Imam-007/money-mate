@@ -5,22 +5,22 @@ export default function LandingPage() {
     <div className="min-h-screen flex flex-col bg-white">
       {/* Navbar */}
       <nav className="flex justify-between items-center px-4 sm:px-6 md:px-10 py-4 md:py-6">
-        {/* Logo */}
-        <div className="flex items-center text-lg sm:text-xl font-semibold">
+        {/* Brand */}
+        <div className="flex items-center text-lg sm:text-xl font-bold tracking-wide">
           Money Mate
         </div>
 
-        {/* Right side buttons */}
+        {/* Actions */}
         <div className="flex items-center space-x-2 sm:space-x-4">
           <Link
             to="/login"
-            className="text-gray-800 font-medium text-sm sm:text-base"
+            className="text-gray-700 font-medium text-sm sm:text-base hover:text-purple-600 transition"
           >
             Login
           </Link>
           <Link
             to="/signup"
-            className="bg-purple-600 text-white px-4 sm:px-5 py-2 rounded-lg font-medium text-sm sm:text-base"
+            className="bg-purple-600 text-white px-4 sm:px-5 py-2 rounded-lg font-semibold text-sm sm:text-base hover:bg-purple-700 transition"
           >
             Get Started
           </Link>
@@ -29,28 +29,28 @@ export default function LandingPage() {
 
       {/* Hero Section */}
       <main className="flex flex-col items-center justify-center text-center flex-1 px-4">
-        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 leading-tight">
-          Take Control of Your Finances
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-extrabold mb-4 sm:mb-6 leading-snug">
+          Manage Money with Confidence
         </h1>
         <p className="text-gray-600 mb-6 sm:mb-8 max-w-lg sm:max-w-2xl text-base sm:text-lg">
-          Your foundation for secure, intelligent financial management.
-          Effortlessly track your income and expenses to achieve your financial
-          goals.
+          Simplify your financial journey with smart, secure money management.
+          Keep track of your income and expenses effortlessly and stay on top of
+          your goals.
         </p>
 
-        {/* Buttons */}
+        {/* CTA Buttons */}
         <div className="flex flex-col sm:flex-row gap-3 sm:space-x-4">
           <Link
             to="/signup"
-            className="bg-purple-600 text-white px-6 py-3 rounded-md font-medium text-sm sm:text-base"
+            className="bg-purple-600 text-white px-6 py-3 rounded-md font-medium text-sm sm:text-base hover:bg-purple-700 transition"
           >
-            Start Tracking for Free
+            Start for Free
           </Link>
           <Link
             to="/about"
-            className="bg-gray-200 px-6 py-3 rounded-md font-medium text-sm sm:text-base"
+            className="bg-gray-200 px-6 py-3 rounded-md font-medium text-sm sm:text-base hover:bg-gray-300 transition"
           >
-            Learn More →
+            Discover More →
           </Link>
         </div>
       </main>
