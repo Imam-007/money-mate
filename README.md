@@ -1,13 +1,13 @@
-#  Money Manager
+#  Money Mate
 
-Money Manager is a **personal finance management web application** that helps you take full control of your **income, expenses, and savings**.  
+Money Mate is a **personal finance management web application** that helps you take full control of your **income, expenses, and savings**.  
 With smart features like **categories, filtering, automated reports, and daily reminders**, financial management becomes effortless.
 
 ---
 
 ##  Links
 
--  **Live Demo**: [Money Manager](https://money-mate-imam.netlify.app/)
+-  **Live Demo**: [Money Mate](https://money-mate-imam.netlify.app/)
 
 ---
 
